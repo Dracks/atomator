@@ -1,0 +1,79 @@
+
+query getReleaseConfigs($buildId: Int!){
+    buildInfo(buildId: $buildId){
+        major,
+        minor,
+        patch,
+        date,
+        release,
+        application {
+            name,
+            configurationsSet {
+                id,
+                name,
+                environments {
+                    id,
+                    environment,
+                }
+            }
+        },
+        changes: changesList{
+            type,
+            description,
+        }
+    }
+}
+
+mutation startDeploy($buildId: Int!, $envId: Int!){
+    startDeploy (buildId: $buildId, environmentId: $envId){
+        resultsId
+    }
+}
+
+query getListDeploys($fromDate: DateTime){
+    deployments(fromDt: $fromDate) {
+        id,
+        status,
+        application {
+            name
+        },
+        environment {
+            environment,
+        }
+        date,
+    }
+}
+
+query getDeployOutput($deployId: Int!) {
+  deployments(deployId: $deployId) {
+    id,
+    status,
+    environment {
+        environment
+    }
+    date,
+    error {
+      message,
+      stacktrace
+    }
+    application {
+        name
+    }
+    build {
+        major
+        minor
+        patch
+    }
+    taskoutputSet{
+        id,
+        name,
+        status,
+        stdout,
+        stderr,
+        message,
+        machine {
+            name
+        }
+    }
+  }
+}

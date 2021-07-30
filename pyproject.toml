@@ -1,0 +1,29 @@
+[tool.black]
+line-length = 88
+target-version = ['py37']
+include = '\.pyi?$'
+exclude = '''
+(
+  /(
+      \.git          # root of the project
+    | \.venv
+    | venv
+    | settings.py
+  )/
+  | 0.*\.py$
+)
+'''
+
+[tool.isort]
+line_length = 88
+multi_line_output = 3
+include_trailing_comma = "True"
+skip = "settings_base.py,settings.py,asgi.py,wsgi.py,settings_docker.py"
+known_django = "django"
+known_graphene = "graphene,graphene_django"
+import_heading_stdlib = "Standard Library"
+import_heading_django = "Django imports"
+import_heading_graphene = "Graphene imports"
+import_heading_thirdparty = "Other libraries"
+import_heading_firstparty = "Atom platform"
+sections = "FUTURE,STDLIB,DJANGO,GRAPHENE,THIRDPARTY,FIRSTPARTY,LOCALFOLDER"

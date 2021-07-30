@@ -1,0 +1,42 @@
+version: '3.1'
+
+services:
+  react:
+    build:
+      dockerfile: docker/node.Dockerfile
+      context: ./
+    volumes:
+      - ./react/src:/home/django/react/src
+      - ./react/config:/home/django/react/config
+      - ./react/package.json:/home/django/react/package.json
+      - ./atom_platform:/home/django/atom_platform
+      - ./static:/home/django/static
+
+  django:
+    build:
+      dockerfile: docker/Dockerfile
+      context: ./
+    depends_on:
+      - postgres
+    volumes:
+      - ./:/home/django
+    ports:
+      - 8080:8081
+    environment:
+      DB_HOST: postgres
+      DB_USER: postgres
+      DB_PASS: postgres
+      DJANGO_SETTINGS_MODULE: atom_platform.settings_docker
+
+  postgres:
+    image: postgres
+    environment:
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_DB: atom
+
+  rabbit-mq:
+    image:  rabbitmq:3-management
+    ports:
+      - 5672:5672
+      - 15672:15672

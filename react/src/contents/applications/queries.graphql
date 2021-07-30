@@ -1,0 +1,78 @@
+query GetApplications{
+    applications {
+        id
+        name
+        releaseBranch
+        tokenSet {
+            id,
+            name,
+            token
+        },
+        repositorySet {
+            id,
+            name,
+            provider,
+            url,
+        },
+        lastBuild {
+            id,
+            major,
+            minor,
+            patch,
+        },
+        lastRelease {
+            id,
+            major,
+            minor,
+            patch,
+        }
+        buildSet {
+            id,
+            date,
+            major,
+            minor,
+            patch,
+            branch,
+            release
+            changesList {
+                type,
+                description,
+            },
+            file {
+                size,
+                name,
+                url,
+            }
+        }
+    }
+}
+
+mutation ReleaseBuild($buildId: Int!){
+    releaseBuild(buildId: $buildId) {
+        build {
+            release
+        },
+    }
+}
+
+query GetLatestBuilds{
+  lastBuilds{
+    id,
+    application{
+        id,
+        name,
+    }
+    major,
+    minor,
+    patch,
+    release,
+    isReleasable,
+    branch,
+    date,
+    file {
+        size,
+        name,
+        url,
+    }
+  }
+}

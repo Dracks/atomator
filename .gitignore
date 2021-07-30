@@ -1,0 +1,8 @@
+settings.py
+venv
+*.pyc
+db.sqlite3
+node_modules
+static/react/
+react.html
+

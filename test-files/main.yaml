@@ -1,0 +1,12 @@
+- hosts: django
+  user: pi
+  name: Initialization code
+  tags: [ update ]
+  tasks:
+    - name: "uname"
+      command: uname -a
+      register: output
+    - name: "sleep"
+      command: sleep 120
+    - debug:
+        msg: "{{output}}"

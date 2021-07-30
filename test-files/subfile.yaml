@@ -1,0 +1,9 @@
+- name: "peperoni"
+  hosts: group1
+  tasks:
+    - name: "Pimpollo"
+      debug:
+        msg: "test - {{ variable }}"
+      tags: ["peperoni"]
+    - name: "Pimpollo"
+      command: python -c "print('ping'); raise Exception('pong')"

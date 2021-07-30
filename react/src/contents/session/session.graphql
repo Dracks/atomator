@@ -1,0 +1,28 @@
+query getUserInfo{
+    myProfile {
+        username
+    }
+}
+
+
+mutation logIn($username: String!, $password: String!) {
+    session {
+        login(username: $username, password: $password) {
+            profile {
+                username
+            }
+            error {
+                code
+            }
+        }
+    }
+}
+
+
+mutation logOut {
+    session {
+        logout {
+            status
+        }
+    }
+}

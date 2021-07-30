@@ -1,0 +1,6 @@
+- model: application.application
+  pk: 1
+  fields:
+    name: hola mundo
+    release_branch: release
+

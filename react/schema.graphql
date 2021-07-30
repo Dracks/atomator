@@ -1,0 +1,207 @@
+schema {
+  query: Query
+  mutation: Mutation
+}
+
+enum BuildChange {
+  A_0
+  A_1
+  A_2
+}
+
+scalar DateTime
+
+type GQLAppConfig {
+  id: Int!
+  application: GQLApplication!
+  name: String!
+  tagsList: [GQLConfigTag!]!
+  environments: [GQLConfigEnvironment!]!
+}
+
+type GQLApplication {
+  id: Int!
+  name: String!
+  releaseBranch: String!
+  tokenSet: [GQLToken!]!
+  repositorySet: [GQLRepository!]!
+  buildSet: [GQLBuild!]!
+  configurationsSet: [GQLAppConfig!]!
+  lastRelease: GQLBuild
+  lastBuild: GQLBuild
+}
+
+type GQLBuild {
+  id: Int!
+  application: GQLApplication!
+  date: DateTime!
+  major: Int!
+  minor: Int!
+  patch: Int!
+  commit: String!
+  branch: String!
+  release: Boolean!
+  change: BuildChange!
+  file: GQLFileInfo
+  changesList: [GQLChange!]!
+  machineSet: [GQLMachine!]!
+  isReleasable: Boolean!
+}
+
+type GQLChange {
+  id: ID!
+  type: GQLChangeType
+  description: String!
+}
+
+enum GQLChangeType {
+  fix
+  improvement
+  new_feature
+  unknown
+}
+
+type GQLConfigEnvironment {
+  id: ID!
+  environment: GQLEnvironmentType
+  configuration: GQLAppConfig!
+  executionoutputSet: [GQLExecutionOutput!]!
+}
+
+type GQLConfigTag {
+  id: ID!
+  name: String!
+}
+
+enum GQLEnvironmentType {
+  devel
+  staging
+  production
+}
+
+type GQLExecutionError {
+  id: Int!
+  message: String!
+  stacktrace: String!
+}
+
+type GQLExecutionOutput {
+  id: Int!
+  status: GQLExecutionStatusType!
+  environment: GQLConfigEnvironment!
+  date: DateTime!
+  build: GQLBuild
+  application: GQLApplication
+  error: GQLExecutionError
+  taskoutputSet: [GQLTaskOutput!]!
+}
+
+enum GQLExecutionStatusType {
+  pending
+  working
+  ok
+  error
+}
+
+type GQLFileInfo {
+  id: ID!
+  name: String!
+  size: Int!
+  contentType: String!
+  url: String!
+}
+
+type GQLMachine {
+  id: ID!
+  name: String!
+}
+
+type GQLRepository {
+  id: ID!
+  applications: [GQLApplication!]!
+  provider: RepositoryProvider!
+  name: String!
+  url: String!
+}
+
+type GQLTaskOutput {
+  id: Int!
+  machine: GQLMachine!
+  name: String!
+  status: GQLTaskStatusType!
+  stdout: String
+  stderr: String
+  message: String
+  appName: String!
+}
+
+enum GQLTaskStatusType {
+  nothing_done
+  changed
+  error
+  unreachable
+}
+
+type GQLToken {
+  id: ID!
+  name: String
+  token: String!
+}
+
+type Login {
+  profile: MyProfileType
+  error: LoginErrorType
+}
+
+type LoginErrorType {
+  code: Int!
+  message: String!
+}
+
+type Logout {
+  status: String
+}
+
+type Mutation {
+  session: Session
+  startDeploy(buildId: Int!, environmentId: Int!): StartDeploy
+  releaseBuild(buildId: Int!): ReleaseBuild
+}
+
+type MyProfileType {
+  id: ID!
+  lastLogin: DateTime
+  isSuperuser: Boolean!
+  username: String!
+  firstName: String!
+  lastName: String!
+  email: String!
+  isStaff: Boolean!
+  dateJoined: DateTime!
+}
+
+type Query {
+  applications: [GQLApplication!]!
+  buildInfo(buildId: Int!): GQLBuild
+  lastBuilds: [GQLBuild!]
+  deployments(deployId: Int, fromDt: DateTime): [GQLExecutionOutput!]
+  myProfile: MyProfileType
+}
+
+type ReleaseBuild {
+  build: GQLBuild
+  error: String
+}
+
+enum RepositoryProvider {
+  A_0
+}
+
+type Session {
+  login(password: String!, username: String!): Login
+  logout: Logout
+}
+
+type StartDeploy {
+  resultsId: Int
+}

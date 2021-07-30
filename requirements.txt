@@ -1,0 +1,9 @@
+django==3.0.6
+requests
+graphene-django==2.9.0
+django-graphql-playground==1.0.0
+graphene~=2.1.8
+celery==4.4.2
+ansible==2.9.9
+django-nested-admin==3.3.2
+elastic-apm==6.0.0
